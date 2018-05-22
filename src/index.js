@@ -1,28 +1,27 @@
 import ReactFiberReconciler from 'react-reconciler';
 import emptyObject from 'fbjs/lib/emptyObject';
+import { createElement } from './elements';
 
 const File = 'FILE';
 const Copy = 'COPY';
 const Move = 'MOVE';
 const Delete = 'DELETE';
+const FileSystem = 'FILE_SYSTEM';
 
 const renderer = ReactFiberReconciler({
   appendInitialChild(parentInstance, child) {
-    console.log('appendInitialChild');
+    parentInstance.appendChild(child);
   },
 
   createInstance(type, props, internalInstanceHandle) {
-    console.log('createInstance');
-    return { type, props };
+    return createElement(type, props);;
   },
 
   createTextInstance(text, rootContainerInstance, internalInstanceHandle) {
-    console.log('createTextInstance');
     return text;
   },
 
   finalizeInitialChildren(domElement, type, props) {
-    console.log('finalizeInitialChildren');
     return false;
   },
 
@@ -64,19 +63,11 @@ const renderer = ReactFiberReconciler({
 
   mutation: {
     appendChild(parentInstance, child) {
-      if (parentInstance.appendChild) {
-        parentInstance.appendChild(child);
-      } else {
-        parentInstance.document = child;
-      }
+      parentInstance.appendChild(child);
     },
 
     appendChildToContainer(parentInstance, child) {
-      if (parentInstance.appendChild) {
-        parentInstance.appendChild(child);
-      } else {
-        parentInstance.document = child;
-      }
+      parentInstance.appendChild(child);
     },
 
     insertBefore(parentInstance, child, beforeChild) {
@@ -88,13 +79,11 @@ const renderer = ReactFiberReconciler({
     },
 
     removeChild(parentInstance, child) {
-      parentInstance.removeChild(child);
+      // noob
     },
 
     removeChildFromContainer(parentInstance, child) {
-      if (parentInstance.removeChild) {
-        parentInstance.removeChild(child);
-      }
+      // noob
     },
 
     commitTextUpdate(textInstance, oldText, newText) {
@@ -111,14 +100,15 @@ const renderer = ReactFiberReconciler({
   },
 });
 
-const render = async (element, filePath, callback) => {
-  try {
-    const container = renderer.createContainer();
-    renderer.updateContainer(element, container, null);
-    console.log(`📝  Finished!`);
-  } catch (e) {
-    throw e;
-  }
+const render = async (element, callback) => {
+  const fs = createElement('FILE_SYSTEM');
+  const container = renderer.createContainer(fs);
+
+  renderer.updateContainer(element, container, null);
+
+  await fs.exec();
+
+  console.log(`📝  Finished!`);
 }
 
 export {
@@ -126,5 +116,6 @@ export {
   Copy,
   Move,
   Delete,
+  FileSystem,
   render
 };
