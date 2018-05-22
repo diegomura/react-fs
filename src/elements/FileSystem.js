@@ -7,9 +7,11 @@ class FileSystem {
     this.children.push(child);
   }
 
-  async exec() {
+  exec() {
     for (let i = 0; i < this.children.length; i++) {
-      await this.children[i].exec();
+      setTimeout(() => {
+        this.children[i].exec();
+      }, i * 2000);
     }
   }
 }

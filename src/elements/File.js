@@ -1,3 +1,5 @@
+import fs from 'fs';
+
 class File {
   constructor(props){
     this.props = props;
@@ -9,7 +11,9 @@ class File {
   }
 
   exec() {
+    const { name, extension = 'txt' } = this.props;
 
+    fs.writeFileSync(`${name}.${extension}`, this.children);
   }
 }
 
