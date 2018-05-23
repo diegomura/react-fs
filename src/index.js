@@ -14,7 +14,7 @@ const renderer = ReactFiberReconciler({
   },
 
   createInstance(type, props, internalInstanceHandle) {
-    return createElement(type, props);;
+    return createElement(type, props);
   },
 
   createTextInstance(text, rootContainerInstance, internalInstanceHandle) {
