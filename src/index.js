@@ -100,7 +100,7 @@ const renderer = ReactFiberReconciler({
   },
 });
 
-const render = async (element, callback) => {
+const render = (element) => {
   const fs = createElement('FILE_SYSTEM');
   const container = renderer.createContainer(fs);
   renderer.updateContainer(element, container, null);
